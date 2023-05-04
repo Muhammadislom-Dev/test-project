@@ -72,3 +72,11 @@ li.page_item.active > a {
   color: white;
   border-color: #ffda3a;
 }
+
+.section-select {
+  width: 180px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  outline: none;
+  margin-top: 15px;
+}

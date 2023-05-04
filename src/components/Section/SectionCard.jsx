@@ -24,7 +24,7 @@ function SectionCard({ evt }) {
         </Box>
         <Box>
           <Heading {...css.title} as="h4" size="md">
-            Krav på enskilda avlopp
+            {evt.country} | {evt.organ} | {evt.file_date}
           </Heading>
           <Flex gap="20px">
             <Flex align="center" gap="5px">
@@ -59,12 +59,14 @@ function SectionCard({ evt }) {
               </Flex>
             </Flex>
             <ButtonGroup gap="25px">
-              <Button {...css.submit}>Öppna</Button>
+              <a target="_blank" href={evt.file} without>
+                <Button {...css.submit}>Öppna</Button>
+              </a>
               <a
+                href={evt.file}
                 without
                 rel="noopener noreferrer"
-                target="_blank"
-                href={evt.file}>
+                target="_blank">
                 <Button {...css.button}>Ladda Ner</Button>
               </a>
             </ButtonGroup>
