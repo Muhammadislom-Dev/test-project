@@ -15,7 +15,7 @@ import PlaceIcon from "../../assets/icons/place.svg";
 import SaveIcon from "../../assets/icons/save.svg";
 import DocumentIcon from "../../assets/icons/document.svg";
 
-function SectionCard({ evt }) {
+function SectionCard({ evt, highlightSearchQuery }) {
   return (
     <Box {...css.card}>
       <Flex gap="15px" align="baseline">
@@ -45,7 +45,7 @@ function SectionCard({ evt }) {
             </Flex>
           </Flex>
           <Text w="750px" mt="0" {...css.text}>
-            {evt.about_text}
+            {highlightSearchQuery(evt.about_text)}
           </Text>
           <Flex align="center" justifyContent="space-between">
             <Flex gap="50px" align="center">

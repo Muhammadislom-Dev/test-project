@@ -78,5 +78,10 @@ li.page_item.active > a {
   padding: 5px 10px;
   border-radius: 6px;
   outline: none;
+  margin: 0 15px;
   margin-top: 15px;
+}
+
+.highlight {
+  background: #ffda3a;
 }

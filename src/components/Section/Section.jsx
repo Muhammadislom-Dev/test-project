@@ -11,6 +11,7 @@ function Section() {
   const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgzMjgyNDU2LCJpYXQiOjE2ODMxOTYwNTYsImp0aSI6ImRhMjA3Nzc0NDA4OTRjM2RiMTJmZWI0ZDVmOWY2YmFkIiwidXNlcl9pZCI6MjB9._34p8O5M30wd3tlwjW8J9JBJnDC66J_jzav2uEJkrRk";
   const [selectedOption, setSelectedOption] = useState({ value: 1, label: 1 });
+  const [searchQuery, setSearchQuery] = useState("");
   const [list, setList] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [select, setSelect] = useState("");
@@ -37,6 +38,30 @@ function Section() {
       .catch((err) => console.log(err));
   }, [select]);
 
+  const filteredData = list?.results?.filter((item) =>
+    item.about_text.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  function highlightSearchQuery(str) {
+    const re = new RegExp(searchQuery, "gi");
+    const matches = str.match(re);
+    if (!matches) {
+      return str;
+    }
+    const parts = str.split(re);
+    return parts.flatMap((part, index) => {
+      if (index < parts.length - 1) {
+        return [
+          part,
+          <span key={index} className="highlight">
+            {matches[index]}
+          </span>,
+        ];
+      } else {
+        return [part];
+      }
+    });
+  }
   return (
     <div className="section">
       <div className="container">
@@ -47,6 +72,8 @@ function Section() {
               type="text"
               placeholder="Search..."
               className="section-input"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
             />
             <img src={CloseIcon} alt="" className="section-img" />
           </label>
@@ -58,13 +85,27 @@ function Section() {
           <option value="kommunstyrelsen">Kommunstyrelsen</option>
           <option value="kommunfullmäktige">Kommunfullmäktige</option>
         </select>
+        <select className="section-select">
+          <option value={true}>Right</option>
+          <option value={false}>The opposite</option>
+        </select>
         <p>{list.count}</p>
         <SimpleGrid>
           {select === ""
-            ? list?.results?.map((evt) => (
-                <SectionCard evt={evt} key={evt.id} />
+            ? filteredData?.map((evt) => (
+                <SectionCard
+                  highlightSearchQuery={highlightSearchQuery}
+                  evt={evt}
+                  key={evt.id}
+                />
               ))
-            : filterData?.map((evt) => <SectionCard evt={evt} key={evt.id} />)}
+            : filterData?.map((evt) => (
+                <SectionCard
+                  highlightSearchQuery={highlightSearchQuery}
+                  evt={evt}
+                  key={evt.id}
+                />
+              ))}
         </SimpleGrid>
 
         <ReactPaginate
