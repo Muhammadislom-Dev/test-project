@@ -44,3 +44,31 @@ label {
   border-bottom: 0.5px solid #555555;
   width: 100%;
 }
+
+.pagination {
+  display: flex;
+  list-style: none;
+  border-radius: 10px;
+  justify-content: flex-start;
+}
+
+.page_link {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  margin-left: -1px;
+  line-height: 1.25;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+}
+
+.page_link:hover {
+  cursor: pointer;
+  background-color: #e6e6e6;
+}
+
+li.page_item.active > a {
+  background: #ffda3a;
+  color: white;
+  border-color: #ffda3a;
+}
