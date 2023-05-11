@@ -2,19 +2,21 @@ import React, { useEffect, useState } from "react";
 import "./Section.css";
 import SearchIcon from "../../assets/icons/search.png";
 import CloseIcon from "../../assets/icons/close.png";
-import { SimpleGrid } from "@chakra-ui/react";
+import { Button, SimpleGrid } from "@chakra-ui/react";
 import SectionCard from "./SectionCard";
 import ReactPaginate from "react-paginate";
 import axios from "axios";
+import { data } from "../data";
 
 function Section() {
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgzMjgyNDU2LCJpYXQiOjE2ODMxOTYwNTYsImp0aSI6ImRhMjA3Nzc0NDA4OTRjM2RiMTJmZWI0ZDVmOWY2YmFkIiwidXNlcl9pZCI6MjB9._34p8O5M30wd3tlwjW8J9JBJnDC66J_jzav2uEJkrRk";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgzODY5NzQ4LCJpYXQiOjE2ODM3ODMzNDgsImp0aSI6IjEyYTkyNjI0MTViNDQ4YzVhZDA3ZDI0NDI1NzMwMDc1IiwidXNlcl9pZCI6MjB9.5Le4pIM7iy2z7X9lAtztYOvMSp6UB1bzC8BD0wuTb-c";
   const [selectedOption, setSelectedOption] = useState({ value: 1, label: 1 });
   const [searchQuery, setSearchQuery] = useState("");
   const [list, setList] = useState([]);
-  const [filterData, setFilterData] = useState([]);
+  const [district, setDistrict] = useState("");
   const [select, setSelect] = useState("");
+  const [region, setRegion] = useState("");
   const [itemOffset, setItemOffset] = useState(0);
   const pageCount = Math.ceil(list?.count / selectedOption.value);
   const handlePageClick = (event) => {
@@ -30,17 +32,10 @@ function Section() {
         },
       })
       .then((res) => {
-        setList(res?.data);
-        setFilterData(
-          res?.data?.results?.filter((evt) => evt?.organ === select)
-        );
+        setList(res?.data?.results);
       })
       .catch((err) => console.log(err));
-  }, [select]);
-
-  const filteredData = list?.results?.filter((item) =>
-    item.about_text.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  }, []);
 
   function highlightSearchQuery(str) {
     const re = new RegExp(searchQuery, "gi");
@@ -62,6 +57,32 @@ function Section() {
       }
     });
   }
+
+  const handleReset = () => {
+    setRegion("");
+    setDistrict("");
+    setSelect("");
+  };
+
+  const filterDistrict = data?.find((evt) => evt?.country === district);
+
+  const filterDataOne = () => {
+    let filteredData = list;
+
+    if (select) {
+      filteredData = list?.filter((evt) => evt?.organ === select);
+    }
+    if (district) {
+      filteredData = list?.filter((evt) => evt?.country === district);
+    }
+    if (region) {
+      filteredData = list?.filter((evt) => evt?.region === region);
+    }
+    return filteredData;
+  };
+
+  const filteredData = filterDataOne();
+
   return (
     <div className="section">
       <div className="container">
@@ -80,32 +101,48 @@ function Section() {
           <button className="section-btn">SÖK</button>
         </div>
         <select
+          value={select}
           onChange={(e) => setSelect(e.target.value)}
           className="section-select">
+          <option value="">All</option>
           <option value="kommunstyrelsen">Kommunstyrelsen</option>
           <option value="kommunfullmäktige">Kommunfullmäktige</option>
         </select>
-        <select className="section-select">
-          <option value={true}>Right</option>
-          <option value={false}>The opposite</option>
+        <select
+          value={district}
+          onChange={(e) => setDistrict(e.target.value)}
+          className="section-select"
+          name=""
+          id="">
+          {data?.map((evt) => (
+            <option key={evt.id} value={evt.country}>
+              {evt.country}
+            </option>
+          ))}
         </select>
+        <select
+          onChange={(e) => setRegion(e.target.value)}
+          className="section-select"
+          name=""
+          id="">
+          {filterDistrict?.regions?.map((evt) => (
+            <option key={evt.id} value={evt.region}>
+              {evt.region}
+            </option>
+          ))}
+        </select>
+        <Button {...css.button} onClick={handleReset}>
+           Delete
+        </Button>
         <p>{list.count}</p>
         <SimpleGrid>
-          {select === ""
-            ? filteredData?.map((evt) => (
-                <SectionCard
-                  highlightSearchQuery={highlightSearchQuery}
-                  evt={evt}
-                  key={evt.id}
-                />
-              ))
-            : filterData?.map((evt) => (
-                <SectionCard
-                  highlightSearchQuery={highlightSearchQuery}
-                  evt={evt}
-                  key={evt.id}
-                />
-              ))}
+          {filteredData?.map((evt) => (
+            <SectionCard
+              highlightSearchQuery={highlightSearchQuery}
+              evt={evt}
+              key={evt.id}
+            />
+          ))}
         </SimpleGrid>
 
         <ReactPaginate
@@ -133,3 +170,14 @@ function Section() {
 }
 
 export default Section;
+
+const css = {
+  button: {
+    background: "#FFDA3A",
+    borderRadius: "10px",
+    width: "131px",
+    height: "34px",
+    border: "none",
+    cursor: "pointer",
+  },
+};

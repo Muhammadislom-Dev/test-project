@@ -16,6 +16,7 @@ import SaveIcon from "../../assets/icons/save.svg";
 import DocumentIcon from "../../assets/icons/document.svg";
 
 function SectionCard({ evt, highlightSearchQuery }) {
+
   return (
     <Box {...css.card}>
       <Flex gap="15px" align="baseline">
