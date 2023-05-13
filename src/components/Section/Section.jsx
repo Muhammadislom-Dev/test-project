@@ -10,7 +10,7 @@ import { data } from "../data";
 
 function Section() {
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgzODY5NzQ4LCJpYXQiOjE2ODM3ODMzNDgsImp0aSI6IjEyYTkyNjI0MTViNDQ4YzVhZDA3ZDI0NDI1NzMwMDc1IiwidXNlcl9pZCI6MjB9.5Le4pIM7iy2z7X9lAtztYOvMSp6UB1bzC8BD0wuTb-c";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg0MDQzODA5LCJpYXQiOjE2ODM5NTc0MDksImp0aSI6IjM3MDdiODIxYTQ4MzQ4Mzc5MTgzMGFiMWY3YjRiNGRjIiwidXNlcl9pZCI6MjB9.7vibMR65eQSXbNqHviy4-O6Juuyxy1ROjE-aEr15bi0";
   const [selectedOption, setSelectedOption] = useState({ value: 1, label: 1 });
   const [searchQuery, setSearchQuery] = useState("");
   const [list, setList] = useState([]);
@@ -62,6 +62,7 @@ function Section() {
     setRegion("");
     setDistrict("");
     setSelect("");
+    setSearchQuery("");
   };
 
   const filterDistrict = data?.find((evt) => evt?.country === district);
@@ -132,7 +133,7 @@ function Section() {
           ))}
         </select>
         <Button {...css.button} onClick={handleReset}>
-           Delete
+          Delete
         </Button>
         <p>{list.count}</p>
         <SimpleGrid>
